@@ -12,16 +12,12 @@ describe('Given the user controller', () => {
     let res;
     let resp;
     let next;
-    let userData;
 
     beforeEach(() => {
         req = { params: {}, body: {} };
         res = {};
         resp = { userName: '', password: '' };
-        userData = {
-            userName: req.body.userName,
-            password: req.body.password,
-        };
+
         res.send = jest.fn().mockReturnValue(res);
         res.json = jest.fn().mockReturnValue(res);
         res.status = jest.fn().mockReturnValue(res);
@@ -106,9 +102,6 @@ describe('Given the user controller', () => {
     });
 
     describe('When registerUser is triggered', () => {
-        beforeEach(() => {});
-
-        let next = jest.fn();
         describe('And it works (promise is resolved)', () => {
             beforeEach(() => {
                 req.body = { email: 'pepe@gmail.com', passwd: '1234' };
