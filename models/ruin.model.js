@@ -14,7 +14,6 @@ export function ruinCreator(modelName = 'Ruin') {
         },
     });
 
-    let Ruin;
     if (mongoose.default.models[modelName]) {
         Ruin = mongoose.model(modelName);
     } else {
@@ -23,4 +22,4 @@ export function ruinCreator(modelName = 'Ruin') {
     return Ruin;
 }
 
-export const Ruin = ruinCreator();
+export let Ruin = ruinCreator();

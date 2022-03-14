@@ -1,5 +1,4 @@
 import bcrypt from 'bcryptjs';
-// import { createToken } from '../services/auth.js';
 import { User } from '../index.js';
 
 export const getAllUsers = async (req, res, next) => {

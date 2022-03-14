@@ -11,13 +11,23 @@ describe('Given the User model', () => {
     });
 
     test('Using previous model', () => {
-        mongoose.default = { models: { User: {} } };
+        mongoose.default = {
+            models: {
+                User: {
+                    // This is intentional
+                },
+            },
+        };
         const model = userCreator();
         expect(mongoose.Schema.prototype.set).toHaveBeenCalled();
         expect(model).toBeTruthy();
     });
     test('Creating a model', () => {
-        mongoose.default = { models: {} };
+        mongoose.default = {
+            models: {
+                // This is intentional
+            },
+        };
         const model = userCreator();
         expect(mongoose.Schema.prototype.set).toHaveBeenCalled();
         expect(model).toBeTruthy();

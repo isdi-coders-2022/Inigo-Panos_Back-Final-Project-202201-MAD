@@ -13,7 +13,6 @@ export function userCreator(modelName = 'User') {
         },
     });
 
-    let User;
     if (mongoose.default.models[modelName]) {
         User = mongoose.model(modelName);
     } else {
@@ -22,4 +21,4 @@ export function userCreator(modelName = 'User') {
     return User;
 }
 
-export const User = userCreator();
+export let User = userCreator();
