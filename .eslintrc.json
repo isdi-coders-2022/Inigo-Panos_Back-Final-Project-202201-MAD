@@ -5,7 +5,7 @@
         "node": true,
         "jest": true
     },
-    "extends": ["eslint:recommended", "prettier"],
+    "extends": ["eslint:airbnb", "prettier"],
     "parserOptions": {
         "ecmaVersion": "latest",
         "sourceType": "module"
