@@ -12,6 +12,7 @@ export function commentCreator(modelName = 'Comment') {
         },
     });
 
+    let Comment;
     if (mongoose.default.models[modelName]) {
         Comment = mongoose.model(modelName);
     } else {
@@ -20,4 +21,4 @@ export function commentCreator(modelName = 'Comment') {
     return Comment;
 }
 
-export let Comment = commentCreator();
+export const Comment = commentCreator();
