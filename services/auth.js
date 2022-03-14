@@ -5,7 +5,6 @@ export function createToken(user) {
     const payload = { userName: user.userName };
     const secret = process.env.SECRET;
     const token = jwt.sign(payload, secret);
-    console.log(token);
     return token;
 }
 /**
