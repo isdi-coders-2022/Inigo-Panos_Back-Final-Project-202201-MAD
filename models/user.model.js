@@ -4,7 +4,10 @@ export function userCreator(modelName = 'User') {
     const userSchema = new mongoose.Schema({
         userName: { type: String, required: true },
         password: { type: String, required: true },
-        profileImage: { type: String, required: true },
+        isAdmin: { type: Boolean, required: true },
+        comments: [{ type: String, required: false }],
+        favorites: [{ type: String, required: false }],
+        visited: [{ type: String, required: false }],
     });
     userSchema.set('toJSON', {
         transform: (document, returnedObject) => {

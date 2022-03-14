@@ -33,18 +33,16 @@ export async function userLogin(req, res) {
 
 export const getAllUsers = async (req, res, next) => {
     try {
-        const resp = await User.find({}).populate('tasks');
+        const resp = await User.find({});
         res.json(resp);
     } catch (err) {
         next(err);
     }
 };
 
-export const userRegister = async (req, resp) => {
-    const encryptedPasswd = bcrypt.hashSync(req.body.passwd);
-    const userData = { ...req.body, passwd: encryptedPasswd };
+export async function userRegister(req, res) {
+    const encryptedPasswd = bcrypt.hashSync(req.body.password);
+    const userData = { ...req.body, password: encryptedPasswd };
     const result = await new User.create(userData);
-    // .save();
-
-    resp.json(result);
-};
+    res.json(result);
+}

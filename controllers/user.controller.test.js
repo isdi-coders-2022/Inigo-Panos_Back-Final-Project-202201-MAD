@@ -36,13 +36,13 @@ describe('Given the user controller', () => {
                 });
             });
             test('Then the call is sent', async () => {
-                await controller.getAllUsers(req, res, next);
+                await controller.getAllUsers(req, res);
                 expect(res.json).toHaveBeenCalled();
             });
         });
         describe('And it does not work', () => {
             beforeEach(() => {
-                User.find.mockReturnValue(null);
+                User.find.mockRejectedValue('null');
             });
 
             test('Then next is called', async () => {
