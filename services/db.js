@@ -11,3 +11,7 @@ export async function mongoConnect() {
     const mongooseConnect = await mongoose.connect(uri);
     return mongooseConnect;
 }
+
+export async function mongoDisconnect() {
+    return mongoose.disconnect();
+}
