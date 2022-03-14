@@ -1,13 +1,13 @@
 import bcrypt from 'bcryptjs';
-import { User } from '../models/user.model.js';
+import { User, userCreator } from '../models/user.model.js';
+import { createToken } from '../services/auth.js';
 
 export async function userLogin(req, res) {
     const userData = {
-        userName: req.body?.userName, //Si no hay username, chapa
+        userName: req.body?.userName,
         password: req.body?.password,
     };
 
-    //const userData = req.body;
     const resp = await User.findOne({
         userName: userData.userName,
     });
@@ -17,7 +17,7 @@ export async function userLogin(req, res) {
         bcrypt.compareSync(userData.password, resp.password)
     ) {
         const token = createToken(userData);
-        res.json({ token }); //Devolver info de usuario
+        res.json({ token });
         return;
     } else {
         return res.status(404).json({
@@ -43,7 +43,8 @@ export const getAllUsers = async (req, res, next) => {
 export const userRegister = async (req, resp) => {
     const encryptedPasswd = bcrypt.hashSync(req.body.passwd);
     const userData = { ...req.body, passwd: encryptedPasswd };
-    const newUser = new User(userData);
-    const result = await newUser.save();
+    const result = await new User.create(userData);
+    // .save();
+
     resp.json(result);
 };

@@ -5,7 +5,9 @@ jest.mock('mongoose');
 
 describe('Given the User model', () => {
     beforeAll(() => {
-        mongoose.Schema.mockImplementation(function () {});
+        mongoose.Schema.mockImplementation(function () {
+            //This is intentional
+        });
         mongoose.Schema.prototype.set = jest.fn();
         mongoose.model.mockReturnValue({});
     });
