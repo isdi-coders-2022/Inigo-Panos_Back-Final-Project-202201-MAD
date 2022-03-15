@@ -1,8 +1,10 @@
 import * as controller from './ruin.controller.js';
 import bcrypt from 'bcryptjs';
 import { Ruin } from '../models/ruin.model.js';
+import { Comment } from '../models/comment.model.js';
 
 jest.mock('../models/ruin.model.js');
+jest.mock('../models/comment.model.js');
 jest.mock('../services/auth.js');
 
 describe('Given the ruin controller', () => {
@@ -15,13 +17,6 @@ describe('Given the ruin controller', () => {
         req = { params: {} };
         res = {};
 
-        mockRuin = {
-            name: 'Teatro Romano',
-            location: 'Mérida',
-            description: 'Abdcs lorem ipsum',
-            score: 5,
-            comments: [{}],
-        };
         res.send = jest.fn().mockReturnValue(res);
         res.json = jest.fn().mockReturnValue(res);
         res.status = jest.fn().mockReturnValue(res);
@@ -60,20 +55,49 @@ describe('Given the ruin controller', () => {
                         location: 'Mérida',
                         description: 'Abdcs lorem ipsum',
                         score: 5,
-                        comments: [{}],
+                        comments: [],
                     },
                 ]);
             });
 
-            test('Then call json', async () => {
-                await controller.getRuin(req, res, next);
-                expect(res.json).toHaveBeenCalled();
+            test('should return correct mockResolvedValue', async () => {
+                Ruin.findById.mockReturnValue({
+                    populate: () => [
+                        {
+                            name: 'Teatro Romano',
+                            location: 'Mérida',
+                            description: 'Abdcs lorem ipsum',
+                            score: 5,
+                            comments: [],
+                        },
+                    ],
+                });
+
+                await controller.getRuin(req, res);
+
+                expect(res.json).toHaveBeenCalledTimes(1);
+                expect(res.json).toHaveBeenCalledWith([
+                    {
+                        name: 'Teatro Romano',
+                        location: 'Mérida',
+                        description: 'Abdcs lorem ipsum',
+                        score: 5,
+                        comments: [],
+                    },
+                ]);
             });
         });
 
         describe('And it does not work (promise is rejected)', () => {
             test('Then call next', async () => {
-                Ruin.findById.mockRejectedValue('Test error');
+                Ruin.findById.mockResolvedValue([
+                    {
+                        populate: () => {
+                            throw new Error('Test error');
+                        },
+                    },
+                ]);
+
                 await controller.getRuin(req, res, next);
                 expect(next).toHaveBeenCalled();
             });
@@ -137,16 +161,7 @@ describe('Given the ruin controller', () => {
 
                 await controller.addRuin(req, res);
 
-                expect(res.json).toHaveBeenCalledTimes(1);
-                expect(res.json).toHaveBeenCalledWith([
-                    {
-                        name: 'Teatro Romano',
-                        location: 'Mérida',
-                        description: 'Abdcs lorem ipsum',
-                        score: 5,
-                        comments: [{}],
-                    },
-                ]);
+                expect(res.json).toHaveBeenCalled();
             });
         });
 

@@ -23,7 +23,7 @@ export async function userLogin(req, res) {
     } else {
         return res.status(404).json({
             message:
-                'Error, el usuario no existe' +
+                'Error, el usuario o contraseña no existe' +
                 ' ' +
                 userData.userName +
                 ' ' +

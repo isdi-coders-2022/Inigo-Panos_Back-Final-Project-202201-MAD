@@ -25,7 +25,6 @@ export const getRuin = async (req, res, next) => {
                 },
             ],
         });
-        console.log(resp?.commentText);
         res.status(200);
         res.json(resp);
     } catch (err) {
