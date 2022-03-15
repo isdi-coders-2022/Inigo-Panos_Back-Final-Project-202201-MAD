@@ -7,7 +7,6 @@ export async function userLogin(req, res) {
         userName: req.body?.userName,
         password: req.body?.password,
     };
-    console.log(userData);
 
     const resp = await User.findOne({
         userName: userData.userName,

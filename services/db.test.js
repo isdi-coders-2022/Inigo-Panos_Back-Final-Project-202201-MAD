@@ -1,12 +1,6 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
-import {
-    mongoConnect,
-    mongoDisconnect,
-    installTasks,
-    installUsers,
-} from './db.js';
-import data from '../data/tasks.data';
+import { mongoConnect, mongoDisconnect } from './db.js';
 
 describe('given a connection with MongoDB', () => {
     afterEach(async () => {
