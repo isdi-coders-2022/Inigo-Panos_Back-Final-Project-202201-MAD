@@ -48,6 +48,32 @@ describe('Given the user controller', () => {
         });
     });
 
+    describe('When getUser is called', () => {
+        describe('And it works', () => {
+            beforeEach(() => {
+                User.findById.mockResolvedValue([
+                    {
+                        userName: 'MockName',
+                        password: 'MockPassword',
+                    },
+                ]);
+            });
+
+            test('Then call json', async () => {
+                await controller.getUser(req, res, next);
+                expect(res.json).toHaveBeenCalled();
+            });
+        });
+
+        describe('And it does not work (promise is rejected)', () => {
+            test('Then call next', async () => {
+                User.findById.mockRejectedValue('Test error');
+                await controller.getUser(req, res, next);
+                expect(next).toHaveBeenCalled();
+            });
+        });
+    });
+
     describe('When loginUser is called', () => {
         describe('And there is no userName', () => {
             beforeEach(() => {
