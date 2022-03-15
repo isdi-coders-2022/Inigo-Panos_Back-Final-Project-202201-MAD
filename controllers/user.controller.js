@@ -7,6 +7,7 @@ export async function userLogin(req, res) {
         userName: req.body?.userName,
         password: req.body?.password,
     };
+    console.log(userData);
 
     const resp = await User.findOne({
         userName: userData.userName,
@@ -40,9 +41,22 @@ export const getAllUsers = async (req, res, next) => {
     }
 };
 
+export const getUser = async (req, res, next) => {
+    try {
+        const resp = await User.findById(req.params.id);
+        res.status(200);
+        res.json(resp);
+    } catch (err) {
+        next(err, 'no existe el usuario especificado.');
+    }
+};
+
 export async function userRegister(req, res) {
     const encryptedPasswd = bcrypt.hashSync(req.body.password);
+
     const userData = { ...req.body, password: encryptedPasswd };
-    const result = await new User.create(userData);
+
+    const result = await User.create(userData);
+
     res.json(result);
 }

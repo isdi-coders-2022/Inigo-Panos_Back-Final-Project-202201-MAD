@@ -5,7 +5,7 @@ export function userCreator(modelName = 'User') {
         userName: { type: String, required: true },
         password: { type: String, required: true },
         isAdmin: { type: Boolean, required: true },
-        comments: [{ type: String, required: false }],
+        comments: [{ type: mongoose.Types.ObjectId, ref: 'Comment' }],
         favorites: [{ type: String, required: false }],
         visited: [{ type: String, required: false }],
     });

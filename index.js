@@ -4,6 +4,8 @@ import cors from 'cors';
 import * as dotenv from 'dotenv';
 import { mongoConnect } from './services/db.js';
 import usersRouter from './routes/users.routes.js';
+import ruinsRouter from './routes/ruins.routes.js';
+import commentsRouter from './routes/comments.routes.js';
 
 dotenv.config();
 mongoConnect();
@@ -16,6 +18,8 @@ app.use(morgan('dev'));
 app.use(cors());
 
 app.use('/users', usersRouter);
+app.use('/ruins', ruinsRouter);
+app.use('/comment', commentsRouter);
 
 app.listen(port, () => {
     console.log(`Server listening in http://localhost:${port}`);

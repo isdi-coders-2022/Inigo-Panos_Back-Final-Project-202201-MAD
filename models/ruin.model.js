@@ -6,8 +6,37 @@ export function ruinCreator(modelName = 'Ruin') {
         location: { type: String, required: true },
         description: { type: String, required: true },
         score: { type: Number, required: true },
-        comments: [{}],
+        comments: [{ type: mongoose.Types.ObjectId, ref: 'Comment' }],
+        // commentUser: {
+        //     type: [
+        //         {
+        //             type: mongoose.Schema.Types.ObjectId,
+        //             ref: 'Comment',
+        //         },
+        //     ],
+        // },
+        // commentText: [
+        //     {
+        //         type: mongoose.Types.ObjectId,
+        //         ref: 'Comment',
+        //         // commentText_text: {
+        //         //     type: mongoose.Types.ObjectId,
+        //         //     ref: 'Comment',
+        //         // },
+        //         // author_id: {
+        //         //     type: mongoose.Schema.Types.ObjectId,
+        //         //     ref: 'Comment',
+        //         // },
+        //         // type: [
+        //         //     {
+        //         //         type: mongoose.Schema.Types.ObjectId,
+        //         //         ref: 'Comment',
+        //         //     },
+        //         // ],
+        //     },
+        // ],
     });
+
     ruinSchema.set('toJSON', {
         transform: (document, returnedObject) => {
             delete returnedObject.__v;
