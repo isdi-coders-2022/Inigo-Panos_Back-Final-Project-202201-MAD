@@ -17,11 +17,11 @@ export async function userLogin(req, res) {
         bcrypt.compareSync(userData.password, resp.password)
     ) {
         userData._id = resp._id;
-        console.log(userData);
+
         const token = createToken(userData);
 
         res.json({ token });
-
+        console.log(token, ' token de controller');
         return;
     } else {
         return res.status(404).json({

@@ -1,3 +1,5 @@
+import { token } from 'morgan';
+
 import { Ruin } from '../models/ruin.model.js';
 import { User } from '../models/user.model.js';
 
@@ -14,8 +16,9 @@ export const getAllRuins = async (req, res, next) => {
 
 export const addFavorite = async (req, res, next) => {
     try {
+        console.log(req.tokenPayload, ' tokenPayload de ruin.contrller');
         const resp = await User.findByIdAndUpdate(
-            { _id: req.body.idUser },
+            { _id: req.tokenPayload.userId },
             { $addToSet: { favorites: req.params.id } }
         );
         res.status(200);
