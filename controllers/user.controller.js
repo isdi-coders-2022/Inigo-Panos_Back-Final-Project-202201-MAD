@@ -6,8 +6,8 @@ export async function userLogin(req, res) {
     const userData = {
         userName: req.body?.userName,
         password: req.body?.password,
+        _id: req.body?.id,
     };
-
     const resp = await User.findOne({
         userName: userData.userName,
     });
@@ -16,8 +16,12 @@ export async function userLogin(req, res) {
         resp.userName === userData.userName &&
         bcrypt.compareSync(userData.password, resp.password)
     ) {
+        userData._id = resp._id;
+        console.log(userData);
         const token = createToken(userData);
+
         res.json({ token });
+
         return;
     } else {
         return res.status(404).json({

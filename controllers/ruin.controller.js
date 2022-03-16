@@ -14,7 +14,6 @@ export const getAllRuins = async (req, res, next) => {
 
 export const addFavorite = async (req, res, next) => {
     try {
-        console.log(req.body, 'req.body');
         const resp = await User.findByIdAndUpdate(
             { _id: req.body.idUser },
             { $addToSet: { favorites: req.params.id } }

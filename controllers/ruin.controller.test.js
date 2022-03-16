@@ -2,9 +2,11 @@ import * as controller from './ruin.controller.js';
 import bcrypt from 'bcryptjs';
 import { Ruin } from '../models/ruin.model.js';
 import { Comment } from '../models/comment.model.js';
+import { User } from '../models/user.model.js';
 
 jest.mock('../models/ruin.model.js');
 jest.mock('../models/comment.model.js');
+jest.mock('../models/user.model.js');
 jest.mock('../services/auth.js');
 
 describe('Given the ruin controller', () => {
@@ -12,6 +14,7 @@ describe('Given the ruin controller', () => {
     let res;
     let next;
     let mockRuin;
+    let idUser;
 
     beforeEach(() => {
         req = { params: {} };
@@ -21,6 +24,8 @@ describe('Given the ruin controller', () => {
         res.json = jest.fn().mockReturnValue(res);
         res.status = jest.fn().mockReturnValue(res);
         next = jest.fn();
+
+        idUser = '6230785357282c2abf249e6b';
     });
     describe('When getAllRuins is triggered', () => {
         describe('And it works (promise is resolved)', () => {
@@ -168,6 +173,29 @@ describe('Given the ruin controller', () => {
         describe('And it not works (promise is rejected)', () => {
             test('Then call next', async () => {
                 Ruin.create.mockRejectedValue('Test error');
+                await controller.addRuin(req, res, next);
+                expect(next).toHaveBeenCalled();
+            });
+        });
+    });
+
+    describe('When addFavorite is called', () => {
+        describe('And it works', () => {
+            beforeEach(() => {
+                User.findByIdAndUpdate.mockResolvedValue([
+                    { _id: 'req.body.idUser' },
+                    { favorites: 'req.params.id' },
+                ]);
+            });
+            test('it should add the ruin id to user favorites', async () => {
+                await controller.addFavorite(req, res, next);
+                expect(res.json).toHaveBeenCalled();
+            });
+        });
+
+        describe('And it does not work (promise is rejected)', () => {
+            test('Then call next', async () => {
+                User.create.mockRejectedValue('Test error');
                 await controller.addRuin(req, res, next);
                 expect(next).toHaveBeenCalled();
             });
