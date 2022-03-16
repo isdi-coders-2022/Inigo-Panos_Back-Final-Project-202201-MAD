@@ -15,16 +15,47 @@ export const getAllRuins = async (req, res, next) => {
 };
 
 export const addFavorite = async (req, res, next) => {
+    // try {
+    //     console.log(req.tokenPayload, ' tokenPayload de ruin.contrller');
+    //     const resp = await User.findByIdAndUpdate(
+    //         { _id: req.tokenPayload.userId }, //Id usuario.
+    //         { $addToSet: { favorites: req.params.id } } // Añade -> {favorites: id_ruina}
+    //     );
+
+    //     if (User.findById()) res.status(200);
+    //     res.json(resp);
+    // } catch (err) {
+    //     next(err, 'no existe la ruina especificada.');
+    // }
     try {
-        console.log(req.tokenPayload, ' tokenPayload de ruin.contrller');
-        const resp = await User.findByIdAndUpdate(
-            { _id: req.tokenPayload.userId },
-            { $addToSet: { favorites: req.params.id } }
+        let foundUser = await User.findById({ _id: req.tokenPayload.userId });
+        const processedFavorites = foundUser.favorites.map((e) => e.toString());
+        const isInFavorites = processedFavorites.some(
+            (e) => e === req.params.id
         );
-        res.status(200);
-        res.json(resp);
-    } catch (err) {
-        next(err, 'no existe la ruina especificada.');
+        let updatedUser;
+
+        if (isInFavorites) {
+            updatedUser = await User.findByIdAndUpdate(
+                req.tokenPayload.userId,
+                {
+                    $pull: { favorites: req.params.id },
+                },
+                { new: true }
+            );
+        } else {
+            updatedUser = await User.findByIdAndUpdate(
+                req.tokenPayload.userId,
+                {
+                    $addToSet: { favorites: req.params.id },
+                },
+                { new: true }
+            );
+        }
+
+        res.status(200).json(updatedUser);
+    } catch (error) {
+        next(error);
     }
 };
 
@@ -34,11 +65,11 @@ export const getRuin = async (req, res, next) => {
             path: 'comments',
             populate: [
                 {
-                    path: 'author_id',
+                    path: 'author_id', // MODELO COMMENT
                     select: 'userName',
                 },
                 {
-                    path: 'ruin_id',
+                    path: 'ruin_id', // MODELO COMMENT
                     select: 'name',
                 },
             ],

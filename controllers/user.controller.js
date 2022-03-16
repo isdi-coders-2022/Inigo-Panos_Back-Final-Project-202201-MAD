@@ -21,7 +21,7 @@ export async function userLogin(req, res) {
         const token = createToken(userData);
 
         res.json({ token });
-        console.log(token, ' token de controller');
+
         return;
     } else {
         return res.status(404).json({
