@@ -14,16 +14,18 @@ export const getAllRuins = async (req, res, next) => {
 
 export const addFavorite = async (req, res, next) => {
     try {
-        let foundUser = await User.findById({ _id: req.tokenPayload.userId });
+        let currentUser = await User.findById({ _id: req.tokenPayload.userId });
         console.log(req.tokenPayload.userId, 'token payload addFavorites');
-        const processedFavorites = foundUser.favorites.map((e) => e.toString());
-        const isInFavorites = processedFavorites.some(
+        const currentUserFavorites = currentUser.favorites.map((e) =>
+            e.toString()
+        );
+        const isInFavorites = currentUserFavorites.some(
             (e) => e === req.params.id
         );
-        let updatedUser;
+        let updatedUserFavorites;
 
         if (isInFavorites) {
-            updatedUser = await User.findByIdAndUpdate(
+            updatedUserFavorites = await User.findByIdAndUpdate(
                 req.tokenPayload.userId,
                 {
                     $pull: { favorites: req.params.id },
@@ -31,7 +33,7 @@ export const addFavorite = async (req, res, next) => {
                 { new: true }
             );
         } else {
-            updatedUser = await User.findByIdAndUpdate(
+            updatedUserFavorites = await User.findByIdAndUpdate(
                 req.tokenPayload.userId,
                 {
                     $addToSet: { favorites: req.params.id },
@@ -41,7 +43,7 @@ export const addFavorite = async (req, res, next) => {
         }
 
         res.status(200);
-        res.json(updatedUser);
+        res.json(updatedUserFavorites);
     } catch (error) {
         next(error);
     }

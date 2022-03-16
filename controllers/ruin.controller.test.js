@@ -15,11 +15,12 @@ describe('Given the ruin controller', () => {
     let next;
     let mockRuin;
     let userId;
-    let isInFavorites;
+    let currentUserFavorites;
     let updatedUser;
 
     beforeEach(() => {
-        req = { params: {} };
+        req = { params: {}, tokenPayload: {} };
+
         res = {};
 
         res.send = jest.fn().mockReturnValue(res);
@@ -182,34 +183,56 @@ describe('Given the ruin controller', () => {
     });
 
     describe('When addFavorite is called', () => {
-        // describe('If the user does not have this location as favorite', () => {
-        //     beforeEach(() => {
-        //         User.findByIdAndUpdate.mockResolvedValue([
-        //             { _id: 'req.tokenPayload.id' },
-        //         ]);
-        //     });
+        describe('If the user does not have this location as favorite', () => {
+            describe('Then it adds it as favorite', () => {
+                req = {
+                    tokenPayload: {
+                        userId: '623213980081da2946de2bfd',
+                    },
+                    params: { id: '623213980081da2946de2bfdA' },
+                };
+                User.findById.mockResolvedValue({
+                    favorites: ['623213980081da2946de2bf'],
+                });
 
-        //     describe('Then it adds it as favorite', () => {
-        //         beforeEach(() => {
-        //             updatedUser = User.findByIdAndUpdate.mockResolvedValue(
-        //                 {
-        //                     $pull: { favorites: req.params.id },
-        //                 },
-        //                 { new: true }
-        //             );
-        //             console.log(updatedUser);
-        //         });
-        //         test('it should add the ruin id to user favorites', async () => {
-        //             await updatedUser.toEqual();
-        //             expect(res.json).toHaveBeenCalled();
-        //         });
-        //     });
-        // });
+                User.findByIdAndUpdate.mockResolvedValue({
+                    favorites: [{}],
+                });
+
+                test('it should add the ruin id to user favorites', async () => {
+                    await controller.addFavorite(req, res, next);
+                    expect(res.json).toHaveBeenCalled();
+                });
+            });
+        });
+
+        describe('If the user does not have this location as favorite', () => {
+            describe('Then it adds it as favorite', () => {
+                req = {
+                    tokenPayload: {
+                        userId: '623213980081da2946de2bfd',
+                    },
+                    params: { id: '623213980081da2946de2bfdA' },
+                };
+                User.findById.mockResolvedValue({
+                    favorites: [],
+                });
+
+                User.findByIdAndUpdate.mockResolvedValue({
+                    favorites: [{ id: '623213980081da2946de2bfdA' }],
+                });
+
+                test('it should add the ruin id to user favorites', async () => {
+                    await controller.addFavorite(req, res, next);
+                    expect(res.json).toHaveBeenCalled();
+                });
+            });
+        });
 
         describe('And it does not work (promise is rejected)', () => {
             test('Then call next', async () => {
                 User.create.mockRejectedValue('Test error');
-                await controller.addRuin(req, res, next);
+                await controller.addFavorite(req, res, next);
                 expect(next).toHaveBeenCalled();
             });
         });
