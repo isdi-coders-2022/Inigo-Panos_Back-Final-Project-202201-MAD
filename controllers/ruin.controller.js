@@ -1,5 +1,3 @@
-import { token } from 'morgan';
-
 import { Ruin } from '../models/ruin.model.js';
 import { User } from '../models/user.model.js';
 
@@ -15,20 +13,9 @@ export const getAllRuins = async (req, res, next) => {
 };
 
 export const addFavorite = async (req, res, next) => {
-    // try {
-    //     console.log(req.tokenPayload, ' tokenPayload de ruin.contrller');
-    //     const resp = await User.findByIdAndUpdate(
-    //         { _id: req.tokenPayload.userId }, //Id usuario.
-    //         { $addToSet: { favorites: req.params.id } } // Añade -> {favorites: id_ruina}
-    //     );
-
-    //     if (User.findById()) res.status(200);
-    //     res.json(resp);
-    // } catch (err) {
-    //     next(err, 'no existe la ruina especificada.');
-    // }
     try {
         let foundUser = await User.findById({ _id: req.tokenPayload.userId });
+        console.log(req.tokenPayload.userId, 'token payload addFavorites');
         const processedFavorites = foundUser.favorites.map((e) => e.toString());
         const isInFavorites = processedFavorites.some(
             (e) => e === req.params.id
@@ -53,7 +40,8 @@ export const addFavorite = async (req, res, next) => {
             );
         }
 
-        res.status(200).json(updatedUser);
+        res.status(200);
+        res.json(updatedUser);
     } catch (error) {
         next(error);
     }

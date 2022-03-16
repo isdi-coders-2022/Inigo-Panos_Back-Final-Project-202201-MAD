@@ -11,6 +11,11 @@ export async function userLogin(req, res) {
     const resp = await User.findOne({
         userName: userData.userName,
     });
+    console.log(userData.userName, resp.userName, 'userNames en login');
+    console.log(
+        bcrypt.compareSync(userData.password, resp.password),
+        ' contraseñas comparadas'
+    );
 
     if (
         resp.userName === userData.userName &&
