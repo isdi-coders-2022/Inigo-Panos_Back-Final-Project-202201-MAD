@@ -1,5 +1,7 @@
 import { Ruin } from '../models/ruin.model.js';
+import { User } from '../models/user.model.js';
 
+// USER
 export const getAllRuins = async (req, res, next) => {
     try {
         const resp = await Ruin.find({});
@@ -32,6 +34,7 @@ export const getRuin = async (req, res, next) => {
     }
 };
 
+// ADMIN
 export const deleteRuin = async (req, res, next) => {
     try {
         await Ruin.findByIdAndDelete(req.params.id);

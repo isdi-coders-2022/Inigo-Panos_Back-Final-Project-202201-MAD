@@ -6,8 +6,8 @@ export function userCreator(modelName = 'User') {
         password: { type: String, required: true },
         isAdmin: { type: Boolean, required: true },
         comments: [{ type: mongoose.Types.ObjectId, ref: 'Comment' }],
-        favorites: [{ type: String, required: false }],
-        visited: [{ type: String, required: false }],
+        favorites: [{ type: mongoose.Types.ObjectId, ref: 'Ruin' }],
+        visited: [{ type: mongoose.Types.ObjectId, ref: 'Ruin' }],
     });
     userSchema.set('toJSON', {
         transform: (document, returnedObject) => {

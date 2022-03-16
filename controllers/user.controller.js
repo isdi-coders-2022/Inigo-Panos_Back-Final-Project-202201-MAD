@@ -59,3 +59,23 @@ export async function userRegister(req, res) {
 
     res.json(result);
 }
+
+// DETAILS
+
+export const addFavorite = async (req, res, next) => {
+    try {
+        const resp = await Ruin.findById(req.params.id).populate({
+            path: 'favorites',
+            populate: [
+                {
+                    path: 'author_id',
+                    select: 'userName',
+                },
+            ],
+        });
+        res.status(200);
+        res.json(resp);
+    } catch (err) {
+        next(err, 'no existe la ruina especificada.');
+    }
+};
