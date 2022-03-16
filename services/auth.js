@@ -17,6 +17,7 @@ export function createToken(user) {
 export function verifyToken(token) {
     const secret = process.env.SECRET;
     try {
+        console.log(token, 'token auth');
         return jwt.verify(token, secret);
     } catch (error) {
         return error.message;

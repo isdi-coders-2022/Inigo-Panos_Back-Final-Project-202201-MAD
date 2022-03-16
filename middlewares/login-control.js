@@ -9,7 +9,7 @@ export const loginRequired = (req, res, next) => {
         name: 'Unauthorized',
     };
     let decodedToken;
-    console.log(authorization);
+
     if (authorization && authorization.toLowerCase().startsWith('bearer')) {
         token = authorization.substring(7);
         decodedToken = verifyToken(token);

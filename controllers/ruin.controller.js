@@ -12,6 +12,20 @@ export const getAllRuins = async (req, res, next) => {
     }
 };
 
+export const addFavorite = async (req, res, next) => {
+    try {
+        console.log(req.body, 'req.body');
+        const resp = await User.findByIdAndUpdate(
+            { _id: req.body.idUser },
+            { $addToSet: { favorites: req.params.id } }
+        );
+        res.status(200);
+        res.json(resp);
+    } catch (err) {
+        next(err, 'no existe la ruina especificada.');
+    }
+};
+
 export const getRuin = async (req, res, next) => {
     try {
         const resp = await Ruin.findById(req.params.id).populate({
