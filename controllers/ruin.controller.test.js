@@ -231,7 +231,7 @@ describe('Given the ruin controller', () => {
 
         describe('And it does not work (promise is rejected)', () => {
             test('Then call next', async () => {
-                User.create.mockRejectedValue('Test error');
+                req = {};
                 await controller.addFavorite(req, res, next);
                 expect(next).toHaveBeenCalled();
             });
