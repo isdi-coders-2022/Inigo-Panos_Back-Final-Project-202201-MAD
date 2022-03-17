@@ -13,9 +13,10 @@ export const getAllRuins = async (req, res, next) => {
 };
 
 export const addFavorite = async (req, res, next) => {
+    console.log('Function init');
     try {
         let currentUser = await User.findById({ _id: req.tokenPayload.userId });
-        console.log(req.tokenPayload.userId, 'token payload addFavorites');
+
         const currentUserFavorites = currentUser.favorites.map((e) =>
             e.toString()
         );
@@ -23,7 +24,6 @@ export const addFavorite = async (req, res, next) => {
             (e) => e === req.params.id
         );
         let updatedUserFavorites;
-
         if (isInFavorites) {
             updatedUserFavorites = await User.findByIdAndUpdate(
                 req.tokenPayload.userId,
@@ -41,9 +41,42 @@ export const addFavorite = async (req, res, next) => {
                 { new: true }
             );
         }
+        res.status(200);
+
+        res.json(updatedUserFavorites);
+    } catch (error) {
+        console.log(error);
+        next(error);
+    }
+};
+
+export const addVisited = async (req, res, next) => {
+    try {
+        let currentUser = await User.findById({ _id: req.tokenPayload.userId });
+        const currentUserVisited = currentUser.visited.map((e) => e.toString());
+        const isInVisited = currentUserVisited.some((e) => e === req.params.id);
+        let updatedUserVisited;
+
+        if (isInVisited) {
+            updatedUserVisited = await User.findByIdAndUpdate(
+                req.tokenPayload.userId,
+                {
+                    $pull: { visited: req.params.id },
+                },
+                { new: true }
+            );
+        } else {
+            updatedUserVisited = await User.findByIdAndUpdate(
+                req.tokenPayload.userId,
+                {
+                    $addToSet: { visited: req.params.id },
+                },
+                { new: true }
+            );
+        }
 
         res.status(200);
-        res.json(updatedUserFavorites);
+        res.json(updatedUserVisited);
     } catch (error) {
         next(error);
     }
@@ -71,7 +104,6 @@ export const getRuin = async (req, res, next) => {
     }
 };
 
-// ADMIN
 export const deleteRuin = async (req, res, next) => {
     try {
         await Ruin.findByIdAndDelete(req.params.id);

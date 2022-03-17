@@ -6,7 +6,12 @@ import {
     deleteRuin,
     getRuin,
     addFavorite,
+    addVisited,
 } from '../controllers/ruin.controller.js';
+import {
+    addComment,
+    deleteComment,
+} from '../controllers/comment.controller.js';
 import { loginRequired } from '../middlewares/login-control.js';
 import { adminRequired } from '../middlewares/isAdmin-control.js';
 
@@ -19,5 +24,9 @@ router.post('/add', loginRequired, adminRequired, addRuin); //adminRequired
 router.patch('/:id', loginRequired, adminRequired, updateRuin); //adminRequired
 router.delete('/:id', loginRequired, adminRequired, deleteRuin); //adminRequired
 
+router.post('/:id/comment', loginRequired, addComment); //loginRequired
+router.delete('/:id/comment/:commentId', loginRequired, deleteComment); //loginRequired
+
 router.patch('/:id/user/favorites', loginRequired, addFavorite); //loginRequired
+router.patch('/:id/user/visited', loginRequired, addVisited);
 export default router;

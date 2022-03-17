@@ -7,7 +7,7 @@ describe('given a connection with MongoDB', () => {
         await mongoDisconnect();
     });
 
-    test('then should be possible connect to our DB ', async () => {
+    test('then it should be possible connect to our DB ', async () => {
         const connect = await mongoConnect();
         expect(connect).toBeTruthy();
         expect(connect.connections[0].name).toBe(
