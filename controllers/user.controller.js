@@ -2,41 +2,38 @@ import bcrypt from 'bcryptjs';
 import { User } from '../models/user.model.js';
 import { createToken } from '../services/auth.js';
 
-export async function userLogin(req, res) {
+export async function userLogin(req, res, next) {
     const userData = {
         userName: req.body?.userName,
         password: req.body?.password,
         _id: req.body?.id,
     };
+
+    const loginError = {
+        message:
+            'Error, el usuario o contraseña no existe' +
+            ' ' +
+            userData.userName +
+            ', ' +
+            userData.password,
+    };
+
     const resp = await User.findOne({
         userName: userData.userName,
     });
-    console.log(userData.userName, resp.userName, 'userNames en login');
-    console.log(
-        bcrypt.compareSync(userData.password, resp.password),
-        ' contraseñas comparadas'
-    );
 
     if (
         resp.userName === userData.userName &&
         bcrypt.compareSync(userData.password, resp.password)
     ) {
         userData._id = resp._id;
-
         const token = createToken(userData);
-
         res.json({ token });
-
         return;
     } else {
-        return res.status(404).json({
-            message:
-                'Error, el usuario o contraseña no existe' +
-                ' ' +
-                userData.userName +
-                ' ' +
-                userData.password,
-        });
+        res.status(401);
+        console.log(loginError);
+        res.json(loginError);
     }
 }
 
@@ -60,11 +57,13 @@ export const getUser = async (req, res, next) => {
 };
 
 export async function userRegister(req, res) {
+    console.log(req.body.password);
     const encryptedPasswd = bcrypt.hashSync(req.body.password);
 
     const userData = { ...req.body, password: encryptedPasswd };
 
     const result = await User.create(userData);
 
+    res.status(201);
     res.json(result);
 }

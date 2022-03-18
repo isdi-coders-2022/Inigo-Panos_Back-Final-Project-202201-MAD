@@ -10,7 +10,7 @@ import commentsRouter from './routes/comments.routes.js';
 dotenv.config();
 mongoConnect();
 
-const app = express();
+export const app = express();
 const port = process.env.PORT;
 
 app.use(express.json());
@@ -21,6 +21,6 @@ app.use('/users', usersRouter);
 app.use('/ruins', ruinsRouter);
 app.use('/comment', commentsRouter);
 
-app.listen(port, () => {
+export const server = app.listen(port, () => {
     console.log(`Server listening in http://localhost:${port}`);
 });

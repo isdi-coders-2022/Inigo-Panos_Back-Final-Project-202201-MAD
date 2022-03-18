@@ -13,7 +13,6 @@ export const getAllRuins = async (req, res, next) => {
 };
 
 export const addFavorite = async (req, res, next) => {
-    console.log('Function init');
     try {
         let currentUser = await User.findById({ _id: req.tokenPayload.userId });
 
@@ -23,6 +22,7 @@ export const addFavorite = async (req, res, next) => {
         const isInFavorites = currentUserFavorites.some(
             (e) => e === req.params.id
         );
+
         let updatedUserFavorites;
         if (isInFavorites) {
             updatedUserFavorites = await User.findByIdAndUpdate(
@@ -42,7 +42,6 @@ export const addFavorite = async (req, res, next) => {
             );
         }
         res.status(200);
-
         res.json(updatedUserFavorites);
     } catch (error) {
         console.log(error);
