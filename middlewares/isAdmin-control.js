@@ -7,8 +7,7 @@ export const adminRequired = async (req, res, next) => {
         next();
     } else {
         const userError = new Error('not authorized user');
-
-        userError.status = 401;
-        next(userError);
+        res.status(401);
+        res.json(userError);
     }
 };
