@@ -32,11 +32,6 @@ describe('Given a route intercepted by loginRequired', () => {
     });
 
     describe('When authorization token is present', () => {
-        beforeEach(() => {
-            User.findById.mockReturnValue({
-                id: 1,
-            });
-        });
         describe('And token is valid', () => {
             beforeEach(() => {
                 User.findById.mockReturnValue({
@@ -49,25 +44,18 @@ describe('Given a route intercepted by loginRequired', () => {
                 expect(next).toHaveBeenCalled();
             });
         });
-        describe('And token is not valid', () => {
+        describe('And user is not admin', () => {
             beforeEach(() => {
                 User.findById.mockReturnValue({
-                    isAdmin: true,
+                    isAdmin: false,
                 });
             });
             test('Then call next with error', async () => {
                 req.tokenPayload.id = '2';
                 await adminRequired(req, res, next);
-                // expect(res.status).toBe(401);
+                // expect(res.status).toEqual(401);
                 expect(res.json).toHaveBeenCalled();
             });
         });
     });
-    // describe('When authorization token is not present', () => {
-    //     test('Then call next with error', async () => {
-    //         req.get.mockReturnValue('');
-    //         await adminRequired(req, res, next);
-    //         expect(next).toHaveBeenCalledWith(tokenError);
-    //     });
-    // });
 });
