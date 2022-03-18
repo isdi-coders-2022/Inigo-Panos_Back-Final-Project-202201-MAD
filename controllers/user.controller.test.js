@@ -85,8 +85,7 @@ describe('Given the user controller', () => {
             test('Then call next', async () => {
                 await controller.userLogin(req, res, next);
                 expect(res.json).toHaveBeenCalledWith({
-                    message:
-                        'Error, el usuario o contraseña no existe undefined undefined',
+                    message: 'Error, el usuario o contraseña no existe',
                 });
             });
         });
@@ -100,8 +99,7 @@ describe('Given the user controller', () => {
             test('Then call next', async () => {
                 await controller.userLogin(req, res, next);
                 expect(res.json).toHaveBeenCalledWith({
-                    message:
-                        'Error, el usuario o contraseña no existe undefined undefined',
+                    message: 'Error, el usuario o contraseña no existe',
                 });
             });
         });

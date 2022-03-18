@@ -19,7 +19,7 @@ describe('Given app', () => {
 
     let id;
     let tokenAdmin;
-    let idPatchRuins;
+    let idRuin;
     let commentId;
 
     describe('TESTING USERS NODE', () => {
@@ -60,6 +60,13 @@ describe('Given app', () => {
                 expect(response.status).toBe(200);
             });
         });
+        describe('When GET /users/:id', () => {
+            test('It returns status 200', async () => {
+                const response = await request(app).get('/users/' + id);
+
+                expect(response.status).toBe(200);
+            });
+        });
     });
 
     describe('TESTING RUINS NODE', () => {
@@ -75,7 +82,7 @@ describe('Given app', () => {
                         score: 5,
                     });
 
-                idPatchRuins = response.body._id;
+                idRuin = response.body._id;
                 expect(response.status).toBe(201);
             });
         });
@@ -87,56 +94,84 @@ describe('Given app', () => {
                 expect(response.status).toBe(200);
             });
         });
-        // describe('When PATCH /ruins', () => {
-        //     test('It returns status 200', async () => {
-        //         const response = await request(app)
-        //             .patch(`/ruins/${idPatchRuins}`)
-        //             .set('Authorization', 'bearer ' + tokenAdmin)
-        //             .send({ newProperty: 'new' });
-        //         expect(response.status).toBe(200);
-        //     });
-        // });
-        // describe('When PATCH /ruins with wrong authorization type', () => {
-        //     test('It returns status 401', async () => {
-        //         const response = await request(app)
-        //             .patch(`/ruins/${idPatchRuins}`)
-        //             .set('Authorization', 'camion ' + tokenAdmin)
-        //             .send({ newProperty: 'new' });
-        //         expect(response.status).toBe(401);
-        //         expect(response.body.error).toBe('tokenAdmin missing or invalid');
-        //     });
-        // });
+        describe('When GET /ruins/:id', () => {
+            test('It returns status 200', async () => {
+                const response = await request(app)
+                    .get('/ruins/' + idRuin)
+                    .set('Authorization', 'bearer ' + tokenAdmin);
+                expect(response.status).toBe(200);
+            });
+        });
+        describe('When PATCH /ruins', () => {
+            test('It returns status 201', async () => {
+                const response = await request(app)
+                    .patch(`/ruins/${idRuin}`)
+                    .set('Authorization', 'bearer ' + tokenAdmin)
+                    .send({ newProperty: 'new' });
+                expect(response.status).toBe(201);
+            });
+        });
+        describe('When PATCH /ruins/:id/user/favorites', () => {
+            test('It returns status 201', async () => {
+                const response = await request(app)
+                    .patch(`/ruins/${idRuin}/user/favorites`)
+                    .set('Authorization', 'bearer ' + tokenAdmin)
+                    .send({ favorites: idRuin });
+                expect(response.status).toBe(200);
+            });
+        });
+        describe('When PATCH /ruins/:id/user/visited', () => {
+            test('It returns status 201', async () => {
+                const response = await request(app)
+                    .patch(`/ruins/${idRuin}/user/visited`)
+                    .set('Authorization', 'bearer ' + tokenAdmin)
+                    .send({ favorites: idRuin });
+                expect(response.status).toBe(200);
+            });
+        });
+
+        describe('TESTING COMMENT NODE', () => {
+            describe('When GET /comments', () => {
+                test('It returns status 200', async () => {
+                    const response = await request(app)
+                        .get(`/ruins/${idRuin}`)
+                        .set('Authorization', 'bearer ' + tokenAdmin);
+                    expect(response.status).toBe(200);
+                });
+            });
+            describe('When PATCH /comment', () => {
+                test('It returns status 201', async () => {
+                    const res = await request(app)
+                        .patch(`/ruins/${idRuin}/comment`)
+                        .send({
+                            author_id: id,
+                            ruin_id: idRuin,
+                            text: 'mock text',
+                        })
+                        .set('Authorization', 'bearer ' + tokenAdmin);
+
+                    commentId = res.body._id;
+
+                    expect(res.status).toBe(201);
+                });
+            });
+            describe('When DELETE /comments', () => {
+                test('It returns status 200', async () => {
+                    const response = await request(app)
+                        .delete(`/ruins/${idRuin}/comment/${commentId}`)
+                        .set('Authorization', 'bearer ' + tokenAdmin);
+                    expect(response.status).toBe(202);
+                });
+            });
+        });
+
+        describe('When DELETE /ruin', () => {
+            test('It returns status 200', async () => {
+                const response = await request(app)
+                    .delete(`/ruins/${idRuin}`)
+                    .set('Authorization', 'bearer ' + tokenAdmin);
+                expect(response.status).toBe(202);
+            });
+        });
     });
-
-    // describe('TESTING COMMENT NODE', () => {
-    //     describe('When GET /comments', () => {
-    //         test('It returns status 200', async () => {
-    //             const response = await request(app)
-    //                 .get('/ruins')
-    //                 .set('Authorization', 'bearer ' + tokenAdmin);
-    //             expect(response.status).toBe(200);
-    //         });
-    //     });
-    //     describe('When PATCH /comment', () => {
-    //         test('It returns status 201', async () => {
-    //             console.log(tokenAdmin);
-    //             const res = await request(app)
-    //                 .patch('/ruins/623470c154b6888c54be7185/comment')
-    //                 .send(mock.commentMock)
-    //                 .set('Authorization', 'bearer ' + tokenAdmin);
-
-    //             console.log(res, ' res de body, supertest');
-    //             commentId = res.body._id;
-    //             console.log(mock.commentMock);
-    //             expect(res.status).toBe(201);
-    //         });
-    //     });
-    // describe('When DELETE /comments', () => {
-    //     test('It returns status 200', async () => {
-    //         const response = await request(app)
-    //             .delete(`/comments/${commentId}`)
-    //             .set('Authorization', 'bearer ' + tokenAdmin);
-    //         expect(response.status).toBe(200);
-    //     });
-    // });
 });

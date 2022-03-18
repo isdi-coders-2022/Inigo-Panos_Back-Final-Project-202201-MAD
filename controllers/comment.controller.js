@@ -52,7 +52,7 @@ export const addComment = async (req, res, next) => {
             { new: true }
         );
         res.status(201);
-        res.json({ 'Succesfully posted comment: ': response });
+        res.json(response);
     } catch (err) {
         next(err, 'no se ha podido crear el comentario especificado.');
     }

@@ -10,12 +10,7 @@ export async function userLogin(req, res, next) {
     };
 
     const loginError = {
-        message:
-            'Error, el usuario o contraseña no existe' +
-            ' ' +
-            userData.userName +
-            ', ' +
-            userData.password,
+        message: 'Error, el usuario o contraseña no existe',
     };
 
     const resp = await User.findOne({

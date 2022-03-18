@@ -109,6 +109,7 @@ export const deleteRuin = async (req, res, next) => {
         res.status(202);
         res.json({ 'Deleted Ruin': req.params.id });
     } catch (err) {
+        console.log('Error al borrar la ruina');
         next(err, 'no se ha podido borrar la ruina especificada.');
     }
 };
