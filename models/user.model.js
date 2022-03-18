@@ -2,12 +2,12 @@ import mongoose from 'mongoose';
 
 export function userCreator(modelName = 'User') {
     const userSchema = new mongoose.Schema({
-        userName: { type: String, required: true },
+        userName: { type: String, required: true, unique: true },
         password: { type: String, required: true },
-        isAdmin: { type: Boolean, required: true },
-        comments: [{ type: String, required: false }],
-        favorites: [{ type: String, required: false }],
-        visited: [{ type: String, required: false }],
+        isAdmin: { type: Boolean },
+        comments: [{ type: mongoose.Types.ObjectId, ref: 'Comment' }],
+        favorites: [{ type: mongoose.Types.ObjectId, ref: 'Ruin' }],
+        visited: [{ type: mongoose.Types.ObjectId, ref: 'Ruin' }],
     });
     userSchema.set('toJSON', {
         transform: (document, returnedObject) => {

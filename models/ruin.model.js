@@ -6,8 +6,9 @@ export function ruinCreator(modelName = 'Ruin') {
         location: { type: String, required: true },
         description: { type: String, required: true },
         score: { type: Number, required: true },
-        comments: [{}],
+        comments: [{ type: mongoose.Types.ObjectId, ref: 'Comment' }],
     });
+
     ruinSchema.set('toJSON', {
         transform: (document, returnedObject) => {
             delete returnedObject.__v;
