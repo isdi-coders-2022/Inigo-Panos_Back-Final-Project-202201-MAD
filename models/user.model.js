@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 export function userCreator(modelName = 'User') {
     const userSchema = new mongoose.Schema({
-        userName: { type: String, required: true },
+        userName: { type: String, required: true, unique: true },
         password: { type: String, required: true },
         isAdmin: { type: Boolean },
         comments: [{ type: mongoose.Types.ObjectId, ref: 'Comment' }],

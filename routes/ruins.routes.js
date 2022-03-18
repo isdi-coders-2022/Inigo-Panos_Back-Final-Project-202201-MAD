@@ -24,7 +24,7 @@ router.post('/add', loginRequired, adminRequired, addRuin); //adminRequired
 router.patch('/:id', loginRequired, adminRequired, updateRuin); //adminRequired
 router.delete('/:id', loginRequired, adminRequired, deleteRuin); //adminRequired
 
-router.post('/:id/comment', loginRequired, addComment); //loginRequired
+router.patch('/:id/comment', loginRequired, addComment); //loginRequired
 router.delete('/:id/comment/:commentId', loginRequired, deleteComment); //loginRequired
 
 router.patch('/:id/user/favorites', loginRequired, addFavorite); //loginRequired

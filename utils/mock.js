@@ -1,13 +1,13 @@
 export const commentMock = {
-    author_id: '1234',
-    ruin_id: '1111',
+    author_id: '623213980081da2946de2bfd',
+    ruin_id: '6230a0e5e31f4c8ad3eca8bc',
     text: 'mock text',
 };
 
 export const userMock = {
-    userName: 'admin',
+    userName: 'Mel',
     password: '1111',
-    isAdmin: false,
+    isAdmin: true,
     comments: [],
     favorites: [],
     visited: [],

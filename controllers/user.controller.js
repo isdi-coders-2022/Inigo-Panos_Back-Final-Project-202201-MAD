@@ -32,7 +32,6 @@ export async function userLogin(req, res, next) {
         return;
     } else {
         res.status(401);
-        console.log(loginError);
         res.json(loginError);
     }
 }
@@ -57,7 +56,6 @@ export const getUser = async (req, res, next) => {
 };
 
 export async function userRegister(req, res) {
-    console.log(req.body.password);
     const encryptedPasswd = bcrypt.hashSync(req.body.password);
 
     const userData = { ...req.body, password: encryptedPasswd };
