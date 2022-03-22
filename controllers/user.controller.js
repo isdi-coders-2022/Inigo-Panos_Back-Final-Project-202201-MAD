@@ -32,12 +32,8 @@ export async function userLogin(req, res, next) {
         const token = createToken(userData);
         console.log('El token es: ', token, ' y el id: ', userId);
 
-        let result = {
-            token: token,
-            id: userId,
-        };
-        console.log({ result });
-        res.json({ result });
+        console.log(token, userId);
+        res.json({ token, userId });
         return;
     } else {
         res.status(401);
