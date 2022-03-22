@@ -111,15 +111,8 @@ describe('Given the ruin controller', () => {
 
     describe('When deleteRuin is called', () => {
         describe('And it works', () => {
-            beforeEach(() => {
-                Ruin.findByIdAndDelete.mockResolvedValue([
-                    {
-                        'Delete Ruin': 12,
-                    },
-                ]);
-            });
-
             test('Then call json', async () => {
+                Ruin.findByIdAndDelete.mockResolvedValue();
                 await controller.deleteRuin(req, res, next);
                 expect(res.json).toHaveBeenCalled();
             });
@@ -276,7 +269,8 @@ describe('Given the ruin controller', () => {
                     },
                     params: { id: '623213980081da2946de2bfdA' },
                 };
-                beforeEach(() => {
+
+                test('it should add the ruin id to user favorites', async () => {
                     User.findById.mockResolvedValue({
                         favorites: [],
                     });
@@ -284,9 +278,6 @@ describe('Given the ruin controller', () => {
                     User.findByIdAndUpdate.mockResolvedValue({
                         favorites: [{ id: '623213980081da2946de2bfdA' }],
                     });
-                });
-
-                test('it should add the ruin id to user favorites', async () => {
                     await controller.addFavorite(req, res, next);
                     expect(res.json).toHaveBeenCalled();
                 });

@@ -5,6 +5,7 @@ export function ruinCreator(modelName = 'Ruin') {
         name: { type: String, required: true },
         location: { type: String, required: true },
         description: { type: String, required: true },
+        images: [{ type: String, required: true }],
         score: { type: Number, required: true },
         comments: [{ type: mongoose.Types.ObjectId, ref: 'Comment' }],
     });

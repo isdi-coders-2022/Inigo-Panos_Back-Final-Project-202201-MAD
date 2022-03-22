@@ -2,6 +2,7 @@ import { Comment } from '../models/comment.model.js';
 import { Ruin } from '../models/ruin.model.js';
 
 export const deleteComment = async (req, res, next) => {
+    console.log(req.body);
     try {
         const { id: ruinId, commentId } = req.params;
         await Comment.findByIdAndDelete(commentId);
@@ -38,6 +39,7 @@ export const deleteComment = async (req, res, next) => {
 };
 
 export const addComment = async (req, res, next) => {
+    console.log(req.body);
     try {
         const { id: ruinId } = req.params;
 
