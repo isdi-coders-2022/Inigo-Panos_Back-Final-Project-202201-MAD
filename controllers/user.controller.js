@@ -52,9 +52,15 @@ export const getAllUsers = async (req, res, next) => {
 };
 
 export const getUser = async (req, res, next) => {
-    console.log(req.body);
+    console.log(req.body, 'getUser en userController');
     try {
-        const resp = await User.findById(req.params.id);
+        const resp = await User.findById(req.params.id)
+            .populate({
+                path: 'comments',
+                ref: 'Comment',
+            })
+            .populate({ path: 'favorites', ref: 'Ruin' })
+            .populate({ path: 'visited', ref: 'Ruin' });
         res.status(200);
         res.json(resp);
     } catch (err) {

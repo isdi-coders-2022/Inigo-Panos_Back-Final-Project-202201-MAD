@@ -133,7 +133,7 @@ export const updateRuin = async (req, res, next) => {
 };
 
 export const addRuin = async (req, res, next) => {
-    console.log(req.body);
+    console.log(req.body, 'addRuin en back');
     try {
         const result = await Ruin.create(req.body);
         res.status(201);

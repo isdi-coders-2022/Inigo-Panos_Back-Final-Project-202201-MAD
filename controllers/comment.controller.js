@@ -1,5 +1,6 @@
 import { Comment } from '../models/comment.model.js';
 import { Ruin } from '../models/ruin.model.js';
+import { User } from '../models/user.model.js';
 
 export const deleteComment = async (req, res, next) => {
     console.log(req.body);
@@ -42,6 +43,7 @@ export const addComment = async (req, res, next) => {
     console.log(req.body);
     try {
         const { id: ruinId } = req.params;
+        const userId = req.tokenPayload.userId;
 
         const result = await Comment.create(req.body);
         const commentId = result._id;
@@ -53,8 +55,20 @@ export const addComment = async (req, res, next) => {
             },
             { new: true }
         );
+        const responseUser = await User.findByIdAndUpdate(
+            userId,
+            {
+                $push: { comments: commentId },
+            },
+            { new: true }
+        );
+
+        const resultOfPopulates = {
+            response,
+            responseUser,
+        };
         res.status(201);
-        res.json(response);
+        res.json(resultOfPopulates);
     } catch (err) {
         next(err, 'no se ha podido crear el comentario especificado.');
     }
