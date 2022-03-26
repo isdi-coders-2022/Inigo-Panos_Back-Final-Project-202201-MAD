@@ -24,7 +24,7 @@ export const deleteComment = async (req, res, next) => {
             },
             { new: true }
         );
-
+        console.log(resposne, 'COMENTARIO(S) BORRADO EN RUINA?');
         // const ruinWithComment = await Ruin.findOne({
         //     comments: { $in: [commentId] },
         // });
@@ -45,8 +45,8 @@ export const deleteComment = async (req, res, next) => {
         // );
         res.status(202);
         res.json({
-            'Ruin Without Comment': resposne,
-            'User without comment': responseUser,
+            resposne,
+            responseUser,
         });
     } catch (err) {
         next(err, 'no se ha podido borrar el comentario especificado.');

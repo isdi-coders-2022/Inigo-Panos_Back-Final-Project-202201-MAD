@@ -73,12 +73,14 @@ export const loginWithToken = async (req, res, next) => {
     };
 
     const authorization = req.get('authorization');
+
     console.log(authorization, ' TOKEN RECIBIDO');
     if (!authorization) {
         next(loginError);
     } else {
         let token;
         let decodedToken;
+        console.log(decodedToken, 'TOKEN DESCODIFICADO');
         if (authorization.toLowerCase().startsWith('bearer')) {
             token = authorization.substring(7);
             decodedToken = verifyToken(token);
@@ -90,6 +92,9 @@ export const loginWithToken = async (req, res, next) => {
                 .populate('visited', {
                     name: 1,
                 });
+
+            let userId = userFound._id;
+            userId = userId.toString();
             console.log(userFound, ' userFound en loginWith token');
             res.json({ token, userId, userFound });
         }
