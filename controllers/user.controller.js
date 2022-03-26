@@ -58,7 +58,7 @@ export async function userLogin(req, res, next) {
                 name: 1,
             });
 
-        console.log(token, userId);
+        console.log(userFound, ' es admin?');
         res.json({ token, userId, userFound });
         return;
     } else {
@@ -91,7 +91,7 @@ export const loginWithToken = async (req, res, next) => {
                     name: 1,
                 });
             console.log(userFound, ' userFound en loginWith token');
-            res.json(userFound);
+            res.json({ token, userId, userFound });
         }
     }
 };

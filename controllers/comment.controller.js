@@ -24,10 +24,6 @@ export const deleteComment = async (req, res, next) => {
             },
             { new: true }
         );
-        console.log(
-            responseUser,
-            ' USUAROI DEL QUE SE HA BORRADO EL COMENTARIO'
-        );
 
         // const ruinWithComment = await Ruin.findOne({
         //     comments: { $in: [commentId] },
@@ -70,6 +66,8 @@ export const addComment = async (req, res, next) => {
             ' al crear nuevo comentario en back. Texto, idUsuario, idRuina'
         );
         const result = await Comment.create(req.body);
+        console.log(result, 'COMENTARIO CREADO');
+
         const commentId = result._id.toString();
         console.log('CLOG DESPUÉS DE COMMENTiD', commentId);
         const response = await Ruin.findByIdAndUpdate(
