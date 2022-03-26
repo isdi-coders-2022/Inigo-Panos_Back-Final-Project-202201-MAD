@@ -14,6 +14,21 @@ export const deleteComment = async (req, res, next) => {
             },
             { new: true }
         );
+
+        const userId = req.tokenPayload.userId;
+        console.log(userId, 'ID DEL USUARIO DEL COMENTARIO');
+        const responseUser = await User.findByIdAndUpdate(
+            userId,
+            {
+                $pull: { comments: commentId },
+            },
+            { new: true }
+        );
+        console.log(
+            responseUser,
+            ' USUAROI DEL QUE SE HA BORRADO EL COMENTARIO'
+        );
+
         // const ruinWithComment = await Ruin.findOne({
         //     comments: { $in: [commentId] },
         // });
@@ -33,28 +48,37 @@ export const deleteComment = async (req, res, next) => {
         //     commentedRuin.comments
         // );
         res.status(202);
-        res.json({ 'Ruin Without Comment': resposne });
+        res.json({
+            'Ruin Without Comment': resposne,
+            'User without comment': responseUser,
+        });
     } catch (err) {
         next(err, 'no se ha podido borrar el comentario especificado.');
     }
 };
 
 export const addComment = async (req, res, next) => {
-    console.log(req.body);
+    // console.log(req.tokenPayload, 'req recibido en addComment');
+    console.log(req.body, 'req.body recibido en addComment');
     try {
-        const { id: ruinId } = req.params;
+        const ruinId = req.body.ruin_id;
         const userId = req.tokenPayload.userId;
 
+        console.log(
+            userId,
+            ruinId,
+            ' al crear nuevo comentario en back. Texto, idUsuario, idRuina'
+        );
         const result = await Comment.create(req.body);
-        const commentId = result._id;
-
+        const commentId = result._id.toString();
+        console.log('CLOG DESPUÉS DE COMMENTiD', commentId);
         const response = await Ruin.findByIdAndUpdate(
             ruinId,
             {
                 $push: { comments: commentId },
             },
             { new: true }
-        );
+        ).populate('comments');
         const responseUser = await User.findByIdAndUpdate(
             userId,
             {

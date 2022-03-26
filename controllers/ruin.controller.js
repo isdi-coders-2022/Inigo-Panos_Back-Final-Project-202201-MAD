@@ -14,7 +14,8 @@ export const getAllRuins = async (req, res, next) => {
 };
 
 export const addFavorite = async (req, res, next) => {
-    console.log(req.body);
+    console.log(req.tokenPayload, ' en ruinController en back');
+    console.log(req.params.id, ' en ruinController en back');
     try {
         let currentUser = await User.findById({ _id: req.tokenPayload.userId });
 
@@ -52,7 +53,8 @@ export const addFavorite = async (req, res, next) => {
 };
 
 export const addVisited = async (req, res, next) => {
-    console.log(req.body);
+    console.log(req.tokenPayload, ' en ruinController en back');
+    console.log(req.params.id, ' en ruinController en back');
     try {
         let currentUser = await User.findById({ _id: req.tokenPayload.userId });
 
@@ -125,6 +127,7 @@ export const updateRuin = async (req, res, next) => {
         const resp = await Ruin.findByIdAndUpdate(req.params.id, req.body, {
             new: true,
         });
+        console.log(resp, ' RUINA ACTUALIZADA EN BACK');
         res.status(201);
         res.json(resp);
     } catch (err) {
