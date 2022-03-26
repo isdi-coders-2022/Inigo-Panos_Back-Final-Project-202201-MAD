@@ -85,7 +85,15 @@ export const loginWithToken = async (req, res, next) => {
             token = authorization.substring(7);
             decodedToken = verifyToken(token);
             const userFound = await User.findById(decodedToken.userId)
-                .populate('comments')
+                .populate({
+                    path: 'comments',
+                    populate: [
+                        {
+                            path: 'ruin_id', // MODELO COMMENT
+                            select: 'name',
+                        },
+                    ],
+                })
                 .populate('favorites', {
                     name: 1,
                 })
@@ -115,7 +123,15 @@ export const getUser = async (req, res, next) => {
     console.log(req.body, 'getUser en userController');
     try {
         const resp = await User.findById(req.params.id)
-            .populate('comments')
+            .populate({
+                path: 'comments',
+                populate: [
+                    {
+                        path: 'ruin_id', // MODELO COMMENT
+                        select: 'name',
+                    },
+                ],
+            })
             .populate('favorites', {
                 name: 1,
             })
