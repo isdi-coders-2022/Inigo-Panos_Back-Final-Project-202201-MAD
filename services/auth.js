@@ -3,10 +3,11 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 export function createToken(user) {
+    console.log(user, ' user de createToken');
     const payload = { userName: user.userName, userId: user._id };
     const secret = process.env.SECRET;
     const token = jwt.sign(payload, secret);
-    return { token };
+    return token;
 }
 /**
  * @description Función que devuelve un JWS token

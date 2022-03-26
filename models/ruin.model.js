@@ -5,8 +5,15 @@ export function ruinCreator(modelName = 'Ruin') {
         name: { type: String, required: true },
         location: { type: String, required: true },
         description: { type: String, required: true },
-        score: { type: Number, required: true },
-        comments: [{ type: mongoose.Types.ObjectId, ref: 'Comment' }],
+        images: { type: String, required: true, sparse: true },
+        score: { type: Number, sparse: true },
+        comments: [
+            {
+                type: mongoose.Types.ObjectId,
+                ref: 'Comment',
+                sparse: true,
+            },
+        ],
     });
 
     ruinSchema.set('toJSON', {

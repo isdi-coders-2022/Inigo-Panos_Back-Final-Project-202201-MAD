@@ -4,7 +4,7 @@ export function commentCreator(modelName = 'Comment') {
     const commentSchema = new mongoose.Schema({
         author_id: { type: mongoose.Types.ObjectId, ref: 'User' },
         ruin_id: { type: mongoose.Types.ObjectId, ref: 'Ruin' },
-        text: { type: String, required: true, unique: true },
+        text: { type: String, required: true },
     });
     commentSchema.set('toJSON', {
         transform: (document, returnedObject) => {
